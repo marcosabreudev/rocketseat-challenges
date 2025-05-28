@@ -15,14 +15,14 @@ app.register(fastifyJwt, {
 app.register(userRoutes, {
   prefix: 'users',
 })
-app.register(mealRoutes, {
-  prefix: 'meals',
-})
 app.register(sessionRoute, {
   prefix: 'sessions',
 })
 app.register(meRoute, {
   prefix: 'me',
+})
+app.register(mealRoutes, {
+  prefix: 'meals',
 })
 
 app
