@@ -1,6 +1,6 @@
 import { AnswerQuestionUseCase } from "./answer-question";
 import { AnswersRepository } from "../repositories/answers-repository";
-import { Answer } from "../entities/answer";
+import { Answer } from "../../enterprise/entities/answer";
 
 class AnswersLocalRepository implements AnswersRepository {
   async create(answer: Answer) {
