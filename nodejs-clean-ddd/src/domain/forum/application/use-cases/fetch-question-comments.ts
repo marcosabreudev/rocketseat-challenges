@@ -1,14 +1,18 @@
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
+import { Either, success } from '@/core/either'
 
 interface FetchQuestionCommentsRequest {
   questionId: string
   page: number
 }
 
-interface FetchQuestionCommentsResponse {
-  questionComments: QuestionComment[]
-}
+type FetchQuestionCommentsResponse = Either<
+  null,
+  {
+    questionComments: QuestionComment[]
+  }
+>
 
 export class FetchQuestionComments {
   constructor(private questionCommentsRepository: QuestionCommentsRepository) {}
@@ -22,8 +26,8 @@ export class FetchQuestionComments {
         page,
       })
 
-    return {
+    return success({
       questionComments,
-    }
+    })
   }
 }

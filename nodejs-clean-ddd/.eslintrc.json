@@ -5,6 +5,7 @@
   ],
   "rules": {
     "no-useless-constructor": "off",
+    "no-empty-object-type:": "off",
     "no-new": "off"
   },
   "env": {
