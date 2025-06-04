@@ -1,15 +1,15 @@
-import { UniqueEntityId } from "@/core/entitites/unique-entity-id";
-import { QuestionsRepository } from "../repositories/questions-repository";
-import { Question } from "../../enterprise/entities/question";
+import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
+import { QuestionsRepository } from '../repositories/questions-repository'
+import { Question } from '../../enterprise/entities/question'
 
 interface CreateQuestionUseCaseRequest {
-  authorId: string;
-  title: string;
-  content: string;
+  authorId: string
+  title: string
+  content: string
 }
 
 interface CreateQuestionUseCaseResponse {
-  question: Question;
+  question: Question
 }
 
 export class CreateQuestionUseCase {
@@ -24,12 +24,12 @@ export class CreateQuestionUseCase {
       authorId: new UniqueEntityId(authorId),
       title,
       content,
-    });
+    })
 
-    await this.questionRepository.create(question);
+    await this.questionRepository.create(question)
 
     return {
       question,
-    };
+    }
   }
 }

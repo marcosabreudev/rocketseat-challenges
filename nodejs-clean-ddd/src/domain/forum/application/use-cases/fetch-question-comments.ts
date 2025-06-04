@@ -1,13 +1,13 @@
-import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
-import { QuestionComment } from "../../enterprise/entities/question-comment";
+import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
+import { QuestionComment } from '../../enterprise/entities/question-comment'
 
 interface FetchQuestionCommentsRequest {
-  questionId: string;
-  page: number;
+  questionId: string
+  page: number
 }
 
 interface FetchQuestionCommentsResponse {
-  questionComments: QuestionComment[];
+  questionComments: QuestionComment[]
 }
 
 export class FetchQuestionComments {
@@ -20,10 +20,10 @@ export class FetchQuestionComments {
     const questionComments =
       await this.questionCommentsRepository.findManyByQuestionId(questionId, {
         page,
-      });
+      })
 
     return {
       questionComments,
-    };
+    }
   }
 }

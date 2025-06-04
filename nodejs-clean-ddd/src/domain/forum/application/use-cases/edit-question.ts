@@ -1,15 +1,15 @@
-import { Question } from "../../enterprise/entities/question";
-import { QuestionsRepository } from "../repositories/questions-repository";
+import { Question } from '../../enterprise/entities/question'
+import { QuestionsRepository } from '../repositories/questions-repository'
 
 interface EditQuestionUseCaseRequest {
-  authorId: string;
-  questionId: string;
-  title: string;
-  content: string;
+  authorId: string
+  questionId: string
+  title: string
+  content: string
 }
 
 interface EditQuestionUseCaseRequest {
-  question: Question;
+  question: Question
 }
 
 export class EditQuestionUseCase {
@@ -21,23 +21,23 @@ export class EditQuestionUseCase {
     title,
     content,
   }: EditQuestionUseCaseRequest): Promise<{}> {
-    const question = await this.questionsRepository.findById(questionId);
+    const question = await this.questionsRepository.findById(questionId)
 
     if (!question) {
-      throw new Error("Question not found.");
+      throw new Error('Question not found.')
     }
 
     if (question.authorId.toString() !== authorId) {
-      throw new Error("Unauthorized");
+      throw new Error('Unauthorized')
     }
 
-    question.title = title;
-    question.content = content;
+    question.title = title
+    question.content = content
 
-    await this.questionsRepository.save(question);
+    await this.questionsRepository.save(question)
 
     return {
       question,
-    };
+    }
   }
 }

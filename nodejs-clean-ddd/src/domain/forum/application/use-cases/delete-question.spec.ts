@@ -1,48 +1,48 @@
-import { InMemoryQuestionsRepository } from "teste/repositories/in-memory-questions-repository";
-import { DeleteQuestionUseCase } from "./delete-question";
-import { makeQuestion } from "teste/factories/make-question";
-import { UniqueEntityId } from "@/core/entitites/unique-entity-id";
+import { InMemoryQuestionsRepository } from 'teste/repositories/in-memory-questions-repository'
+import { DeleteQuestionUseCase } from './delete-question'
+import { makeQuestion } from 'teste/factories/make-question'
+import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
 
-let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
-let sut: DeleteQuestionUseCase;
+let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let sut: DeleteQuestionUseCase
 
-describe("Delete Question", () => {
+describe('Delete Question', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
-    sut = new DeleteQuestionUseCase(inMemoryQuestionsRepository);
-  });
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    sut = new DeleteQuestionUseCase(inMemoryQuestionsRepository)
+  })
 
-  it("should be able to delete a question", async () => {
+  it('should be able to delete a question', async () => {
     const newQuestion = makeQuestion(
       {
-        authorId: new UniqueEntityId("author-1"),
+        authorId: new UniqueEntityId('author-1'),
       },
-      new UniqueEntityId("question-1")
-    );
+      new UniqueEntityId('question-1'),
+    )
 
-    await inMemoryQuestionsRepository.create(newQuestion);
+    await inMemoryQuestionsRepository.create(newQuestion)
 
-    expect(inMemoryQuestionsRepository.items).toHaveLength(1);
+    expect(inMemoryQuestionsRepository.items).toHaveLength(1)
 
-    await sut.execute({ questionId: "question-1", authorId: "author-1" });
+    await sut.execute({ questionId: 'question-1', authorId: 'author-1' })
 
-    expect(inMemoryQuestionsRepository.items).toHaveLength(0);
-  });
+    expect(inMemoryQuestionsRepository.items).toHaveLength(0)
+  })
 
-  it("should not be able to delete a question from another user", async () => {
+  it('should not be able to delete a question from another user', async () => {
     const newQuestion = makeQuestion(
       {
-        authorId: new UniqueEntityId("author-1"),
+        authorId: new UniqueEntityId('author-1'),
       },
-      new UniqueEntityId("question-1")
-    );
+      new UniqueEntityId('question-1'),
+    )
 
-    await inMemoryQuestionsRepository.create(newQuestion);
+    await inMemoryQuestionsRepository.create(newQuestion)
 
-    expect(inMemoryQuestionsRepository.items).toHaveLength(1);
+    expect(inMemoryQuestionsRepository.items).toHaveLength(1)
 
     await expect(() =>
-      sut.execute({ questionId: "question-1", authorId: "author-2" })
-    ).rejects.toBeInstanceOf(Error);
-  });
-});
+      sut.execute({ questionId: 'question-1', authorId: 'author-2' }),
+    ).rejects.toBeInstanceOf(Error)
+  })
+})

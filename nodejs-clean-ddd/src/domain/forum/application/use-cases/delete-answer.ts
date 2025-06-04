@@ -1,8 +1,8 @@
-import { AnswersRepository } from "../repositories/answers-repository";
+import { AnswersRepository } from '../repositories/answers-repository'
 
 interface DeleteAnswerUseCaseRequest {
-  answerId: string;
-  authorId: string;
+  answerId: string
+  authorId: string
 }
 
 export class DeleteAnswerUseCase {
@@ -12,18 +12,18 @@ export class DeleteAnswerUseCase {
     answerId,
     authorId,
   }: DeleteAnswerUseCaseRequest): Promise<{}> {
-    const answer = await this.answersRespotiry.findById(answerId);
+    const answer = await this.answersRespotiry.findById(answerId)
 
     if (!answer) {
-      throw new Error("Answer not found.");
+      throw new Error('Answer not found.')
     }
 
     if (answer.authorId.toString() !== authorId) {
-      throw new Error("Unauthorized");
+      throw new Error('Unauthorized')
     }
 
-    await this.answersRespotiry.delete(answer);
+    await this.answersRespotiry.delete(answer)
 
-    return {};
+    return {}
   }
 }

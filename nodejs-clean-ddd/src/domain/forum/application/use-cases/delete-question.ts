@@ -1,8 +1,8 @@
-import { QuestionsRepository } from "../repositories/questions-repository";
+import { QuestionsRepository } from '../repositories/questions-repository'
 
 interface DeleteQuestionUseCaseRequest {
-  questionId: string;
-  authorId: string;
+  questionId: string
+  authorId: string
 }
 
 export class DeleteQuestionUseCase {
@@ -12,18 +12,18 @@ export class DeleteQuestionUseCase {
     questionId,
     authorId,
   }: DeleteQuestionUseCaseRequest): Promise<{}> {
-    const question = await this.questionsRepository.findById(questionId);
+    const question = await this.questionsRepository.findById(questionId)
 
     if (!question) {
-      throw new Error("Question not found");
+      throw new Error('Question not found')
     }
 
     if (question.authorId.toValue() !== authorId) {
-      throw new Error("Unauthorized");
+      throw new Error('Unauthorized')
     }
 
-    await this.questionsRepository.delete(question);
+    await this.questionsRepository.delete(question)
 
-    return {};
+    return {}
   }
 }
