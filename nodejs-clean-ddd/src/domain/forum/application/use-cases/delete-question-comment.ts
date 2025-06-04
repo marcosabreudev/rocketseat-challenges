@@ -1,11 +1,18 @@
-import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
+/* eslint-disable @typescript-eslint/ban-types */
+import { Either, error, success } from '@/core/either'
+import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 interface DeleteQuestionCommentUseCaseRequest {
-  authorId: string;
-  questionCommentId: string;
+  authorId: string
+  questionCommentId: string
 }
 
-interface DeleteQuestionCommentUseCaseResponse {}
+type DeleteQuestionCommentUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {}
+>
 
 export class DeleteQuestionCommentUseCase {
   constructor(private questionCommentsRepository: QuestionCommentsRepository) {}
@@ -15,19 +22,19 @@ export class DeleteQuestionCommentUseCase {
     questionCommentId,
   }: DeleteQuestionCommentUseCaseRequest): Promise<DeleteQuestionCommentUseCaseResponse> {
     const questionComment = await this.questionCommentsRepository.findById(
-      questionCommentId
-    );
+      questionCommentId,
+    )
 
     if (!questionComment) {
-      throw new Error("Question comment not found");
+      return error(new ResourceNotFoundError())
     }
 
     if (questionComment.authorId.toString() !== authorId) {
-      throw new Error("Unauthorized");
+      return error(new NotAllowedError())
     }
 
-    await this.questionCommentsRepository.delete(questionComment);
+    await this.questionCommentsRepository.delete(questionComment)
 
-    return {};
+    return success({})
   }
 }

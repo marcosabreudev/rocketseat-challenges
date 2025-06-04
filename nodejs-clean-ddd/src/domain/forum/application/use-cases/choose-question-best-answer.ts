@@ -1,50 +1,54 @@
-import { Question } from "../../enterprise/entities/question";
-import { AnswersRepository } from "../repositories/answers-repository";
-import { QuestionsRepository } from "../repositories/questions-repository";
+import { Either, error, success } from '@/core/either'
+import { Question } from '../../enterprise/entities/question'
+import { AnswersRepository } from '../repositories/answers-repository'
+import { QuestionsRepository } from '../repositories/questions-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 interface ChooseQuestionBestAnswerUseCaseRequest {
-  authorId: string;
-  answerId: string;
+  authorId: string
+  answerId: string
 }
 
-interface ChooseQuestionBestAnswerUseCaseResponse {
-  question: Question;
-}
+type ChooseQuestionBestAnswerUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  { question: Question }
+>
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
     private questionsRepository: QuestionsRepository,
-    private answersRepository: AnswersRepository
+    private answersRepository: AnswersRepository,
   ) {}
 
   async execute({
     authorId,
     answerId,
   }: ChooseQuestionBestAnswerUseCaseRequest): Promise<ChooseQuestionBestAnswerUseCaseResponse> {
-    const answer = await this.answersRepository.findById(answerId);
+    const answer = await this.answersRepository.findById(answerId)
 
     if (!answer) {
-      throw new Error("Answer not found");
+      return error(new ResourceNotFoundError())
     }
 
     const question = await this.questionsRepository.findById(
-      answer.questionId.toValue()
-    );
+      answer.questionId.toValue(),
+    )
 
     if (!question) {
-      throw new Error("Question not found");
+      return error(new ResourceNotFoundError())
     }
 
     if (question.authorId.toString() !== authorId) {
-      throw new Error("Unauthorized");
+      return error(new NotAllowedError())
     }
 
-    question.bestAnswerId = answer.id;
+    question.bestAnswerId = answer.id
 
-    await this.questionsRepository.save(question);
+    await this.questionsRepository.save(question)
 
-    return {
+    return success({
       question,
-    };
+    })
   }
 }

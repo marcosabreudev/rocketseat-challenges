@@ -1,23 +1,24 @@
-import { InMemoryQuestionsRepository } from "teste/repositories/in-memory-questions-repository";
-import { CreateQuestionUseCase } from "./create-question";
+import { InMemoryQuestionsRepository } from 'teste/repositories/in-memory-questions-repository'
+import { CreateQuestionUseCase } from './create-question'
 
-let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
-let sut: CreateQuestionUseCase;
+let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let sut: CreateQuestionUseCase
 
-describe("Create Question", () => {
+describe('Create Question', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
-    sut = new CreateQuestionUseCase(inMemoryQuestionsRepository);
-  });
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    sut = new CreateQuestionUseCase(inMemoryQuestionsRepository)
+  })
 
-  it("should be able to create a question", async () => {
-    const { question } = await sut.execute({
-      authorId: "1",
-      title: "New Question",
-      content: "New question content",
-    });
+  it('should be able to create a question', async () => {
+    const question = await sut.execute({
+      authorId: '1',
+      title: 'New Question',
+      content: 'New question content',
+    })
 
-    expect(question.id).toBeTruthy();
-    expect(inMemoryQuestionsRepository.items[0].id).toBe(question.id);
-  });
-});
+    expect(inMemoryQuestionsRepository.items[0].id).toBe(
+      question.value?.question.id,
+    )
+  })
+})
