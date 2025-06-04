@@ -1,0 +1,45 @@
+import { UniqueEntityId } from "@/core/entitites/unique-entity-id";
+import { AnswerComment } from "../../enterprise/entities/answer-comment";
+import { AnswerCommentsRepository } from "../repositories/answer-comments-repository";
+import { AnswersRepository } from "../repositories/answers-repository";
+
+interface CommentOnAnswerUseCaseRequest {
+  authorId: string;
+  answerId: string;
+  content: string;
+}
+
+interface CommentOnAnswerUseCaseResponse {
+  answerComment: AnswerComment;
+}
+
+export class CommentOnAnswerUseCase {
+  constructor(
+    private answerCommentsRepository: AnswerCommentsRepository,
+    private answersRepository: AnswersRepository
+  ) {}
+
+  async execute({
+    answerId,
+    authorId,
+    content,
+  }: CommentOnAnswerUseCaseRequest): Promise<CommentOnAnswerUseCaseResponse> {
+    const answer = await this.answersRepository.findById(answerId);
+
+    if (!answer) {
+      throw new Error("Answer not found");
+    }
+
+    const answerComment = AnswerComment.create({
+      answerId: new UniqueEntityId(answerId),
+      authorId: new UniqueEntityId(authorId),
+      content,
+    });
+
+    await this.answerCommentsRepository.create(answerComment);
+
+    return {
+      answerComment,
+    };
+  }
+}
