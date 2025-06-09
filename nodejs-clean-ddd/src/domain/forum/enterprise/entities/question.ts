@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
 import dayjs from 'dayjs'
-import { Entity } from '@/core/entitites/entity'
 import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
 import { Option } from '@/core/types/optional'
 import { Slug } from './value-objects/slug'
+import { AggregateRoot } from '@/core/entitites/aggregate-root'
+import { QuestionAttachmentList } from './question-attachment-list'
 
 export interface QuestionProps {
   authorId: UniqueEntityId
@@ -10,11 +12,12 @@ export interface QuestionProps {
   title: string
   content: string
   slug: Slug
+  attachments: QuestionAttachmentList
   createdAt: Date
   updatedAt?: Date
 }
 
-export class Question extends Entity<QuestionProps> {
+export class Question extends AggregateRoot<QuestionProps> {
   get authorId() {
     return this.props.authorId
   }
@@ -33,6 +36,10 @@ export class Question extends Entity<QuestionProps> {
 
   get slug() {
     return this.props.slug
+  }
+
+  get attachments() {
+    return this.props.attachments
   }
 
   get createdAt() {
@@ -62,19 +69,25 @@ export class Question extends Entity<QuestionProps> {
     this.touch()
   }
 
+  set attachments(attachments: QuestionAttachmentList) {
+    this.props.attachments = attachments
+    this.touch()
+  }
+
   set bestAnswerId(answerId: UniqueEntityId | undefined) {
     this.props.bestAnswerId = answerId
     this.touch()
   }
 
   static create(
-    props: Option<QuestionProps, 'createdAt' | 'slug'>,
+    props: Option<QuestionProps, 'createdAt' | 'slug' | 'attachments'>,
     id?: UniqueEntityId,
   ) {
     const question = new Question(
       {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title),
+        attachments: props.attachments ?? new QuestionAttachmentList(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,
