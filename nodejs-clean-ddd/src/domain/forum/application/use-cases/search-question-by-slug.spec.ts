@@ -1,6 +1,6 @@
 import { InMemoryQuestionsRepository } from 'teste/repositories/in-memory-questions-repository'
 import { makeQuestion } from 'teste/factories/make-question'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { SearchQuestionBySlugUseCase } from './search-question-by-slug'
 import { Success } from '@/core/either'
 

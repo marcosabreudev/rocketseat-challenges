@@ -2,7 +2,7 @@ import { InMemoryQuestionsRepository } from 'teste/repositories/in-memory-questi
 import { EditQuestionUseCase } from './edit-question'
 import { makeQuestion } from 'teste/factories/make-question'
 import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: EditQuestionUseCase
