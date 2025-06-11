@@ -2,14 +2,19 @@ import { InMemoryQuestionsRepository } from 'teste/repositories/in-memory-questi
 import { makeQuestion } from 'teste/factories/make-question'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { SearchQuestionBySlugUseCase } from './search-question-by-slug'
-import { Success } from '@/core/either'
+import { InMemoryQuestionAttachmentsRepository } from 'teste/repositories/in-memory-question-attachments-repository'
 
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: SearchQuestionBySlugUseCase
 
 describe('Search Question By Slug Use Case', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
     sut = new SearchQuestionBySlugUseCase(inMemoryQuestionsRepository)
   })
 
@@ -21,9 +26,11 @@ describe('Search Question By Slug Use Case', () => {
 
     const result = await sut.execute({ slug: 'example-question' })
 
-    if (result instanceof Success) {
-      expect(result.value.question).toEqual(newQuestion)
-    }
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: newQuestion.title,
+      }),
+    })
   })
 
   it('should thow an error when search question where not exists', async () => {

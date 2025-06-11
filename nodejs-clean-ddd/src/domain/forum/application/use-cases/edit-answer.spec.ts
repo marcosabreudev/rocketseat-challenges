@@ -3,13 +3,19 @@ import { EditAnswerUseCase } from './edit-answer'
 import { makeAnswer } from 'teste/factories/make-answer'
 import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { InMemoryAnswerAttachmentsRepository } from 'teste/repositories/in-memory-answer-attachments-repository'
 
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let sut: EditAnswerUseCase
 
 describe('Edit Answer', () => {
   beforeEach(() => {
-    inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    inMemoryAnswerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      inMemoryAnswerAttachmentsRepository,
+    )
     sut = new EditAnswerUseCase(inMemoryAnswersRepository)
   })
 
