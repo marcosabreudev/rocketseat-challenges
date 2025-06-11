@@ -4,7 +4,7 @@ import { InMemoryAnswersRepository } from 'teste/repositories/in-memory-answers-
 import { makeQuestion } from 'teste/factories/make-question'
 import { UniqueEntityId } from '@/core/entitites/unique-entity-id'
 import { makeAnswer } from 'teste/factories/make-answer'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 import { InMemoryQuestionAttachmentsRepository } from 'teste/repositories/in-memory-question-attachments-repository'
 import { InMemoryAnswerAttachmentsRepository } from 'teste/repositories/in-memory-answer-attachments-repository'
 
